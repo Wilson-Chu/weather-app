@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="stylesheet" href="style_gif.css" /> -->
+    <title>Weather App</title>
+  </head>
+  <body>
+    <form action="" class="form">
+      <label for="'search">Search Location: </label>
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search"
+        required
+      />
+      <input type="submit" id="submit" value="Submit" />
+    </form>
+    <h1 class="temp"></h1>
+    <h1 class="unit-system"></h1>
+    <h2 class="city"></h2>
+    <h2 class="country"></h2>
+    <script>
+      const tempOfLocation = document.querySelector(".temp");
+      const unitSystem = document.querySelector(".unit-system");
+      const city = document.querySelector(".city");
+      const country = document.querySelector(".country");
+      const form = document.querySelector(".form");
+      const search = document.getElementById("search");
+      let searchTerm;
+      let units = ""; // &units=metric OR &units=imperial
+      let unitKCF = "K"; // Unit system being used: Kelvin, Celsius, or Fahrenheit
+
+      form.addEventListener("submit", loadLocation);
+
+      // Made this for generic searches...
+      async function fetchLocation(location) {
+        try {
+          const response = await fetch(
+            "https://api.openweathermap.org/data/2.5/weather?q=" +
+              location +
+              units +
+              "&APPID=e8f6188ad8df3a7a1f3a0003183aebed",
+            {
+              mode: "cors",
+            }
+          );
+          const json = await response.json();
+          tempOfLocation.textContent = json.main.temp;
+          city.textContent = json.name;
+          country.textContent = json.sys.country;
+          unitSystem.textContent = unitKCF;
+        } catch {
+          console.log("You done messed up!");
+        }
+      }
+
+      async function loadLocation(e) {
+        searchTerm = search.value;
+        if (!searchTerm) {
+          searchTerm = "London, UK"; // If the location is empty, we default to London, UK
+        }
+        e.preventDefault();
+
+        try {
+          const response = await fetch(
+            "https://api.openweathermap.org/data/2.5/weather?q=" +
+              searchTerm +
+              units +
+              "&APPID=e8f6188ad8df3a7a1f3a0003183aebed",
+            {
+              mode: "cors",
+            }
+          );
+          const json = await response.json();
+          tempOfLocation.textContent = json.main.temp;
+          city.textContent = json.name;
+          country.textContent = json.sys.country;
+          unitSystem.textContent = unitKCF;
+        } catch {
+          console.log("Unable to find location, will default to London, UK");
+          fetchLocation("London, UK");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadLocation);
+    </script>
+  </body>
+</html>
