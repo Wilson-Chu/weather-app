@@ -1,9 +1,5 @@
-// const tempOfLocation = document.querySelector(".temp");
-// const unitSystem = document.querySelector(".unit-system");
-// const city = document.querySelector(".city");
-// const country = document.querySelector(".country");
-let tempOfLocation = document.querySelector(".weather-now");
-let location = document.querySelector(".location");
+const tempOfLocation = document.querySelector(".weather-now");
+const cityCountry = document.querySelector(".location");
 
 const form = document.querySelector(".form");
 const search = document.getElementById("search");
@@ -11,10 +7,9 @@ let searchTerm;
 let units = "&units=metric"; // &units=metric OR &units=imperial
 let unitCF = "°C"; // Unit system being used: Celsius or Fahrenheit
 
-form.addEventListener("submit", loadLocation);
+form.addEventListener("submit", loadData);
 
-// Made this for generic searches...
-async function fetchLocation(location) {
+async function fetchData(location) {
   try {
     const response = await fetch(
       "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -26,18 +21,14 @@ async function fetchLocation(location) {
       }
     );
     const json = await response.json();
-    // tempOfLocation.textContent = json.main.temp;
-    // city.textContent = json.name;
-    // country.textContent = json.sys.country;
-    // unitSystem.textContent = unitCF;
     tempOfLocation.textContent = `${json.main.temp} ${unitCF}`;
-    location.textContent = `${json.name}, ${json.sys.country}`;
+    cityCountry.textContent = `${json.name}, ${json.sys.country}`;
   } catch {
     console.log("You done messed up!");
   }
 }
 
-async function loadLocation(e) {
+async function loadData(e) {
   searchTerm = search.value;
   if (!searchTerm) {
     searchTerm = "London, UK"; // If the location is empty, we default to London, UK
@@ -55,16 +46,12 @@ async function loadLocation(e) {
       }
     );
     const json = await response.json();
-    // tempOfLocation.textContent = json.main.temp;
-    // city.textContent = json.name;
-    // country.textContent = json.sys.country;
-    // unitSystem.textContent = unitCF;
     tempOfLocation.textContent = `${json.main.temp} ${unitCF}`;
-    location.textContent = `${json.name}, ${json.sys.country}`;
+    cityCountry.textContent = `${json.name}, ${json.sys.country}`;
   } catch {
     console.log("Unable to find location, will default to London, UK");
-    fetchLocation("London, UK");
+    fetchData("London, UK");
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadLocation);
+document.addEventListener("DOMContentLoaded", loadData);
