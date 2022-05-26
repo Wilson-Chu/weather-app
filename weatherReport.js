@@ -21,7 +21,7 @@ async function fetchData(location) {
       }
     );
     const json = await response.json();
-    tempOfLocation.textContent = `${json.main.temp} ${unitCF}`;
+    tempOfLocation.textContent = `${Math.round(json.main.temp)} ${unitCF}`;
     cityCountry.textContent = `${json.name}, ${json.sys.country}`;
   } catch {
     console.log("You done messed up!");
@@ -46,7 +46,7 @@ async function loadData(e) {
       }
     );
     const json = await response.json();
-    tempOfLocation.textContent = `${json.main.temp} ${unitCF}`;
+    tempOfLocation.textContent = `${Math.round(json.main.temp)} ${unitCF}`;
     cityCountry.textContent = `${json.name}, ${json.sys.country}`;
   } catch {
     console.log("Unable to find location, will default to London, UK");
