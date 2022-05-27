@@ -1,6 +1,5 @@
 const tempOfLocation = document.querySelector(".weather-now");
 const cityCountry = document.querySelector(".location");
-
 const form = document.querySelector(".form");
 const search = document.getElementById("search");
 let searchTerm;
