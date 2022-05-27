@@ -31,7 +31,7 @@ async function fetchData(location) {
 async function loadData(e) {
   searchTerm = search.value;
   if (!searchTerm) {
-    searchTerm = "London, UK"; // If the location is empty, we default to London, UK
+    searchTerm = "London, UK"; // If the location is empty, default to London, UK
   }
   e.preventDefault();
 
