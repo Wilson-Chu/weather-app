@@ -1,8 +1,30 @@
 body {
+    display: flex;
+    flex-direction: column;
     background-color: azure;
+    justify-content: center;
+    align-items: center;
 }
 
 button,
 #submit {
     cursor: pointer;
+}
+
+button {
+    margin: 15px;
+    width: 150px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid grey;
+    border-radius: 20%;
+    padding: 20px;
+    align-items: center;
+}
+
+.condition {
+    text-transform: capitalize;
 }

@@ -1,11 +1,16 @@
-const tempOfLocation = document.querySelector(".weather-now");
-const cityCountry = document.querySelector(".location");
 const form = document.querySelector(".form");
 const search = document.getElementById("search");
 const toggleUnit = document.querySelector(".toggle-unit");
+const tempOfLocation = document.querySelector(".weather-now");
+const cityCountry = document.querySelector(".location");
+const condition = document.querySelector(".condition");
+const feelsLike = document.querySelector(".weather-feel");
+const humidity = document.querySelector(".humidity");
+const windSpeed = document.querySelector(".wind-speed");
 let searchTerm;
 let units = "&units=metric"; // &units=metric OR &units=imperial
 let unitCF = "°C"; // Unit system being used: Celsius or Fahrenheit
+let unitSpeed = "KPH"; // Unit changes depending on unitCF: m/s or MPH
 
 form.addEventListener("submit", loadData);
 toggleUnit.addEventListener("click", switchUnit);
@@ -16,18 +21,30 @@ async function fetchData(location) {
       "https://api.openweathermap.org/data/2.5/weather?q=" +
         location +
         units +
-        "&APPID=e8f6188ad8df3a7a1f3a0003183aebed",
+        "&APPID=28fe7b5f9a78838c639143fc517e4343",
       {
         mode: "cors",
       }
     );
     const json = await response.json();
-
-    tempOfLocation.textContent = `${Math.round(json.main.temp)} ${unitCF}`;
     cityCountry.textContent = `${json.name}, ${json.sys.country}`;
+    tempOfLocation.textContent = `${Math.round(json.main.temp)} ${unitCF}`;
+    condition.textContent = `${json.weather[0].description}`;
+    feelsLike.textContent = `Feels like: ${Math.round(
+      json.main.feels_like
+    )} ${unitCF}`;
+    humidity.textContent = `Humidity: ${json.main.humidity}%`;
+
+    if (unitSpeed === "KPH") {
+      json.wind.speed *= 3.6; // Converting default metric unit of m/s to KPH
+    }
+    windSpeed.textContent = `Wind Speed: ${Math.round(
+      json.wind.speed
+    )} ${unitSpeed}`;
   } catch {
-    console.log("Unable to find location, will default to London, UK");
-    fetchData("London, UK");
+    alert(
+      `Unable to find location "${searchTerm}". Please check spelling carefully.`
+    );
   }
 }
 
@@ -38,12 +55,14 @@ function switchUnit(e) {
     toggleUnit.textContent = "Switch To °F";
     units = "&units=metric";
     unitCF = "°C";
+    unitSpeed = "KPH";
     loadData(e);
   } else {
     toggleUnit.classList.add(".active");
     toggleUnit.textContent = "Switch To °C";
     units = "&units=imperial";
     unitCF = "°F";
+    unitSpeed = "MPH";
     loadData(e);
   }
 }
